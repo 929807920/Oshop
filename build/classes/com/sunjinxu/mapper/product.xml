@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sunjinxu.mapper.ProductMapper">
+	<!-- 增加商品 -->
+	<insert id="add" parameterType="com.sunjinxu.pojo.Product"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into product (
+		name,sellerId,size,price,stock,sold,desc,img )
+		values
+		(#{name},#{sellerId},#{size},#{price},#{stock},#{sold},#{desc},#{img})
+	</insert>
+	<insert id="addAttr" parameterType="com.sunjinxu.pojo.Product">
+		insert into p_attr (
+		pid,typeId,push_level,discount,dprice,tag,create_at,update_at )
+		values
+		(#{id},#{typeId},#{pushLevel},#{discount},#{dprice},#{tag},#{create_at},#{update_at})
+	</insert>
+	<!-- 添加商品类型 -->
+	<insert id="addType" parameterType="com.sunjinxu.pojo.Type">
+		insert into p_type (
+		code,name,pcode)
+		values (#{code},#{name},#{pcode})
+	</insert>
+	<!-- 删除商品 -->
+	<delete id="delete" parameterType="com.sunjinxu.pojo.Product">
+		delete from product where id= #{id}
+	</delete>
+	<delete id="deleteAttr" parameterType="com.sunjinxu.pojo.Product">
+		delete from p_attr where pid= #{id}
+	</delete>
+	<!-- 添加商品类型 -->
+	<delete id="deleteType" parameterType="com.sunjinxu.pojo.Type">
+		delete from p_type where
+		id= #{id}
+	</delete>
+	<!-- 获取商品 -->
+	<select id="get" parameterType="_int" resultType="com.sunjinxu.pojo.Product">
+		select
+		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.desc,product.img,
+		(select p_type.name from p_type where p_type.id=p_attr.typeId) as type,
+		p_attr.push_level,p_attr.discount,p_attr.dprice,p_attr.tag,p_attr.create_at,p_attr.update_at
+		from product
+		left join p_attr
+		on product.id=p_attr.pid
+		where product.id=#{id}
+	</select>
+	<!-- 更新商品 -->
+	<update id="update" parameterType="com.sunjinxu.pojo.Product">
+		update product set
+		name=#{name},size=#{size},price=#{price},stock=#{stock},desc=#{desc},img=#{img} where id=#{id}
+	</update>
+	<update id="updateAttr" parameterType="com.sunjinxu.pojo.Product">
+		update p_attr set
+		typeId=#{typeId},push_level=#{push_level},discount=#{discount},dprice=#{dprice},tag=#{tag},create_at=#{create_at},update_at=#{update_at} where pid=#{id}
+	</update>
+	<!-- 获取商品列表 -->
+	<select id="list" resultType="com.sunjinxu.pojo.Product">
+		select
+		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.desc,product.img,
+		(select p_type.name from p_type where p_type.id=p_attr.typeId) as type,
+		p_attr.push_level,p_attr.discount,p_attr.dprice,p_attr.tag,p_attr.create_at,p_attr.update_at
+		from product
+		left join p_attr
+		on product.id=p_attr.pid
+		order by update_at desc
+		limit #{start},#{pageSize}
+	</select>
+	<select id="searchList" resultType="com.sunjinxu.pojo.Product">
+		select
+		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.desc,product.img,
+		(select p_type.name from p_type where p_type.id=p_attr.typeId) as type,
+		p_attr.push_level,p_attr.discount,p_attr.dprice,p_attr.tag,p_attr.create_at,p_attr.update_at
+		from product
+		left join p_attr
+		on product.id=p_attr.pid
+		where product.name like "%"#{name}"%"
+		order by update_at desc
+		limit #{start},#{pageSize}
+	</select>
+	<!-- 统计 -->
+	<select id="total" resultType="_int">
+		select count(id) from product
+	</select>
+	<select id="searchTotal" resultType="int">
+		select count(id) from product
+		WHERE name like "%"#{name}"%"
+	</select>
+	<!-- 获取文章类型 -->
+	<select id="findAllType" resultMap="getType">
+		select id,code,name,pcode from p_type
+	</select>
+	<resultMap id="getType" type="Type">
+		<id property="id" column="id" />
+		<result property="code" column="code" />
+		<result property="name" column="name" />
+		<result property="pcode" column="pcode" />
+	</resultMap>
+</mapper>
