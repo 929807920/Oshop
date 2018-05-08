@@ -1,6 +1,7 @@
 package com.sunjinxu.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sunjinxu.controller.base.BaseController;
 import com.sunjinxu.pojo.user.Basic;
 import com.sunjinxu.service.UserService;
+
+import net.sf.json.JSONArray;
 
 @Controller
 @RequestMapping("")
@@ -49,17 +52,39 @@ public class UserController extends BaseController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("login")
+	@RequestMapping("userLogin")
 	public void login(HttpServletRequest request,HttpServletResponse response,Basic user) throws NoSuchAlgorithmException, IOException{
-		System.out.println("控制器：login");
+		System.out.println("控制器：userLogin");
 		user.setPassword(pwdMD5(user.getPassword()));
-		if (userService.login(user)!=null) {
-			printJSONInteger(response, 1);	//账密匹配
+		user=userService.login(user);
+		if (user!=null) {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("user", user);
+			printJSONInteger(response, 1);	//账密匹配
 		}else {
 			String string = "登录名和密码错误，请重新输入";
 			printJSONString(response, string);	//账密不匹配
 		}
+	}
+	
+	@RequestMapping("showIndex")
+	public void showIndex(HttpServletRequest request,HttpServletResponse response,Basic user) throws NoSuchAlgorithmException, IOException{
+		System.out.println("控制器：showIndex");
+		HttpSession session = request.getSession(true);
+		user = (Basic) session.getAttribute("user");
+		
+		
+		//返回到客户端
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		JSONArray array = JSONArray.fromObject(user);
+
+		System.out.println("用户登录2："+array);
+		String data = array.toString();
+		System.out.println("======="+data);
+		out.print(array);
+		out.flush();
+		out.close();
 	}
 }

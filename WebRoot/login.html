@@ -1,5 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +16,7 @@
 		<div class="form sign-in">
 			<h2>欢迎登录汤姆猫商城</h2>
 			<form id="loginform" method="post">
-				<label><span>Account</span><input id="username" type="username" required autofocus/></label> 
+				<label><span>Account</span><input id="username" type="text" required autofocus/></label> 
 				<label><span>Password</span><input id="password" type="password" required/></label>
 				<p class="forgot-pass"> <a class="forgot-pass" href="#">忘记密码 ?</a></p>
 				<button id="loginbtn" type="button" class="submit">登 录</button>
@@ -89,14 +87,14 @@
 			$.ajax({
 				type:"POST",
 				contenType : "application/json;charset-utf-8",
-				url:"login",
+				url:"userLogin",
 				data:{
 					username:$("#username").val(),
 					password:$("#password").val()
 				},
 				success:function(data){
 					if(data==1){
-						window.location.href="index.jsp";
+						window.location.href="index.html";
 					}else{
 						$("#errorMsg").html(data);
 					}
@@ -106,23 +104,27 @@
 		$("#regbtn").click(function(){
 			var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
 			var email = $('#regemail').val().replace(/\s|\xA0/g, "");
-			$.ajax({
-				type:"POST",
-				contenType : "application/json;charset-utf-8",
-				url:"userReg",
-				data:{
-					username:$("#regusername").val(),
-					email:$("#regemail").val(),
-					password:$("#regpassword").val()
-				},
-				success:function(data){
-					if(data==1){
-						window.location.href="index.jsp";
-					}else{
-						$("#regerrorMsg").html(data);
+			if (!reg.test(email)) {
+				$("#regerrorMsg").html("邮箱格式不正确");
+			} else {
+				$.ajax({
+					type:"POST",
+					contenType : "application/json;charset-utf-8",
+					url:"userReg",
+					data:{
+						username:$("#regusername").val(),
+						email:$("#regemail").val(),
+						password:$("#regpassword").val()
+					},
+					success:function(data){
+						if(data==1){
+							//window.location.href="index.html";
+						}else{
+							$("#regerrorMsg").html(data);
+						}
 					}
-				}
-			})
+				})
+			}
 		});
 	</script>
 </body>

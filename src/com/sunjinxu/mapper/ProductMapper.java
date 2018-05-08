@@ -21,5 +21,5 @@ public interface ProductMapper {
 	List<Product> searchList(@Param("start") int start,@Param("pageSize") int pageSize,@Param("name") String name);
 	int total();
 	int searchTotal(String name);
-	List<Object> findAllType();
+	List<Object> findTypes();
 }

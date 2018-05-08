@@ -8,9 +8,9 @@
 	<insert id="add" parameterType="com.sunjinxu.pojo.Product"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into product (
-		name,sellerId,size,price,stock,sold,desc,img )
+		name,sellerId,size,price,stock,description,img )
 		values
-		(#{name},#{sellerId},#{size},#{price},#{stock},#{sold},#{desc},#{img})
+		(#{name},#{sellerId},#{size},#{price},#{stock},#{desc},#{img})
 	</insert>
 	<insert id="addAttr" parameterType="com.sunjinxu.pojo.Product">
 		insert into p_attr (
@@ -39,7 +39,7 @@
 	<!-- 获取商品 -->
 	<select id="get" parameterType="_int" resultType="com.sunjinxu.pojo.Product">
 		select
-		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.desc,product.img,
+		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.description,product.img,
 		(select p_type.name from p_type where p_type.id=p_attr.typeId) as type,
 		p_attr.push_level,p_attr.discount,p_attr.dprice,p_attr.tag,p_attr.create_at,p_attr.update_at
 		from product
@@ -50,7 +50,7 @@
 	<!-- 更新商品 -->
 	<update id="update" parameterType="com.sunjinxu.pojo.Product">
 		update product set
-		name=#{name},size=#{size},price=#{price},stock=#{stock},desc=#{desc},img=#{img} where id=#{id}
+		name=#{name},size=#{size},price=#{price},stock=#{stock},description=#{desc},img=#{img} where id=#{id}
 	</update>
 	<update id="updateAttr" parameterType="com.sunjinxu.pojo.Product">
 		update p_attr set
@@ -59,7 +59,7 @@
 	<!-- 获取商品列表 -->
 	<select id="list" resultType="com.sunjinxu.pojo.Product">
 		select
-		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.desc,product.img,
+		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.description,product.img,
 		(select p_type.name from p_type where p_type.id=p_attr.typeId) as type,
 		p_attr.push_level,p_attr.discount,p_attr.dprice,p_attr.tag,p_attr.create_at,p_attr.update_at
 		from product
@@ -70,7 +70,7 @@
 	</select>
 	<select id="searchList" resultType="com.sunjinxu.pojo.Product">
 		select
-		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.desc,product.img,
+		product.id,product.name,product.sellerId,product.size,product.price,product.stock,product.sold,product.description,product.img,
 		(select p_type.name from p_type where p_type.id=p_attr.typeId) as type,
 		p_attr.push_level,p_attr.discount,p_attr.dprice,p_attr.tag,p_attr.create_at,p_attr.update_at
 		from product
@@ -89,7 +89,7 @@
 		WHERE name like "%"#{name}"%"
 	</select>
 	<!-- 获取文章类型 -->
-	<select id="findAllType" resultMap="getType">
+	<select id="findTypes" resultMap="getType">
 		select id,code,name,pcode from p_type
 	</select>
 	<resultMap id="getType" type="Type">
@@ -98,4 +98,13 @@
 		<result property="name" column="name" />
 		<result property="pcode" column="pcode" />
 	</resultMap>
+	<!-- 巨幕 -->
+	<select id="screenList" resultType="com.sunjinxu.pojo.Product">
+		select product.id,product.name,product.description,product.img,p_attr.push_level,p_sort.screen
+		from product,p_attr,p_sort
+		where product.id=p_attr.pid
+		and product.id=p_sort.pid
+		order by p_sort.screen
+		limit limit 0,#{number}
+	</select>
 </mapper>

@@ -1,6 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!doctype html>
+﻿<!doctype html>
 <html class="no-js" lang="en">
     <head>
         <meta charset="utf-8">
@@ -73,6 +71,10 @@
 		============================================ -->		
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         
+        <!-- template JS
+		============================================ -->
+        <script src="js/template.js"></script>
+        
         <!-- Color Css Files Start -->
         <link rel="alternate stylesheet" type="text/css" href="switcher/color-one.css" title="color-one" media="screen" />
         <link rel="alternate stylesheet" type="text/css" href="switcher/color-two.css" title="color-two" media="screen" />
@@ -126,11 +128,11 @@
                                         <ul>
                                             <li><a href="#">个人中心 <i class="fa fa-angle-down"></i></a>
                                                 <ul class="submenu-mainmenu">
-                                                    <li><a href="login.jsp"><i class="fa fa-circle"></i>登录</a></li>
+                                                	<c:if test="${user==null }"><li><a href="login.html"><i class="fa fa-circle"></i>登录</a></li></c:if>
                                                     <li><a href="#"><i class="fa fa-circle"></i>账户</a></li>
                                                     <li><a href="#"><i class="fa fa-circle"></i>收藏</a></li>
-                                                    <li><a href="cart.jsp"><i class="fa fa-circle"></i>购物车</a></li>
-                                                    <li><a href="checkout.jsp"><i class="fa fa-circle"></i>我的账单</a></li>
+                                                    <li><a href="cart.html"><i class="fa fa-circle"></i>购物车</a></li>
+                                                    <li><a href="checkout.html"><i class="fa fa-circle"></i>我的账单</a></li>
                                                 </ul>
                                             </li>
                                             <!-- <li class="currency"><a href="#">USD <i class="fa fa-angle-down"></i></a>
@@ -165,9 +167,9 @@
                                     <div class="top-right">
                                         <div class="top-login-cart">
                                             <ul>
-                                                <li class=" hidden-xs"><a href="login.jsp">登录 / 注册</a></li>
-                                                <li class=" hidden-xs"><a href="checkout.jsp">查看账单</a></li>
-                                                <li><a href="cart.jsp"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true" style="color: red;margin-right:3px"></i>购物车 (3)</a>
+                                                <li id="user-info" class=" hidden-xs"><a href="login.html">登录 / 注册</a></li>
+                                                <li class=" hidden-xs"><a href="checkout.html">查看账单</a></li>
+                                                <li><a href="cart.html"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true" style="color: red;margin-right:3px"></i>购物车 (3)</a>
                                                     <ul class="submenu-mainmenu">
                                                         <li class="single-cart-item clearfix">
                                                             <span class="cart-img">
@@ -207,13 +209,16 @@
                                                         </li>
                                                         <li>
                                                             <span class="sub-total-cart text-center">小 计 <span>$620</span>
-                                                                <a href="cart.jsp" class="view-cart active">去 购物车</a>
-                                                                <a href="checkout.jsp" class="view-cart">查看账单明细</a>
+                                                                <a href="cart.html" class="view-cart active">去 购物车</a>
+                                                                <a href="checkout.html" class="view-cart">查看账单明细</a>
                                                             </span>
                                                         </li>    
                                                     </ul>
                                                 </li>
                                             </ul>
+                                            <script type="text/html" id="user-info-script">
+												<a href="#">{{username}}</a>
+											</script>
                                         </div>
                                    </div>    
                                </div>
@@ -225,7 +230,7 @@
                             <div class="row">
                                 <div class="col-md-3 col-sm-6 col-xs-12">
                                     <div class="header-logo">
-                                        <a href="index.jsp"><img src="img/logo/1.png" alt="shofixe"></a>
+                                        <a href="index.html"><img src="img/logo/1.png" alt="shofixe"></a>
                                     </div>
                                 </div>
                                 <div class="col-md-3 hidden-sm hidden-xs">
@@ -265,11 +270,11 @@
                         <nav>
                             <div class="mainmenu">
                                 <ul>
-                                    <li><a href="index.jsp">主页</a></li>
-									<li><a href="shop.jsp">商店</a></li>
-                                    <li><a href="cart.jsp">购物车</a></li>
-									<li><a href="checkout.jsp">我的账单</a></li>
-									<li><a href="contact.jsp">联系</a></li>
+                                    <li><a href="index.html">主页</a></li>
+									<li><a href="shop.html">商店</a></li>
+                                    <li><a href="cart.html">购物车</a></li>
+									<li><a href="checkout.html">我的账单</a></li>
+									<li><a href="contact.html">联系</a></li>
                                 </ul>
                             </div>
                         </nav>                  
@@ -282,11 +287,11 @@
                                     <div class="mobile-menu">
                                         <nav id="dropdown">
                                             <ul>
-                                                <li><a href="index.jsp">主页</a></li>
-												<li><a href="shop.jsp">商店</a></li>
-			                                    <li><a href="cart.jsp">购物车</a></li>
-												<li><a href="checkout.jsp">我的账单</a></li>
-												<li><a href="contact.jsp">联系</a></li>
+                                                <li><a href="index.html">主页</a></li>
+												<li><a href="shop.html">商店</a></li>
+			                                    <li><a href="cart.html">购物车</a></li>
+												<li><a href="checkout.html">我的账单</a></li>
+												<li><a href="contact.html">联系</a></li>
                                             </ul>
                                         </nav>
                                     </div>					
@@ -324,9 +329,7 @@
                                                     </div>     
                                                     <div class="slider-content slider-text-3 text-left hidden-xs">
                                                         <div class="wow bounceInDown" data-wow-duration="3s" data-wow-delay="0.3s">
-                                                            <p>专属定制全棉免烫衬衫，你值得拥有<br> 
-            
-                                                            22万名商务精英男士的共同选择</p>
+                                                            <p>专属定制全棉免烫衬衫，你值得拥有 22万名商务精英男士的共同选择</p>
                                                         </div>
                                                     </div>
                                                     <div class="slider-content slider-text-4 text-left hidden-sm hidden-xs">
@@ -4431,7 +4434,7 @@
                             <div class="col-md-4 col-sm-12 col-xs-12">
                                 <div class="touch-left">
                                     <div class="touch-logo mb-35">
-                                        <a href="index.jsp"><img src="img/logo/2.png" alt="shofixe"></a>
+                                        <a href="index.html"><img src="img/logo/2.png" alt="shofixe"></a>
                                     </div>
                                     <p>Lorem ipsum dolor sit amet, consectetur adi elit, sed do eiusmod tempor incididunt ut ore  dolore magna aliqua. Ut enim ad minim eniam</p>
                                     <p>Lorem ipsum dolor sit amet, consectetur adi elit, sed do eiusmod tempor incididunt ut</p>
@@ -4503,9 +4506,9 @@
                                     <div class="footer-widget">
                                         <h5>公司</h5>
                                         <ul>
-                                            <li><a href="index.jsp"><i class="fa fa-circle"></i>商城首页</a></li>
+                                            <li><a href="index.html"><i class="fa fa-circle"></i>商城首页</a></li>
                                             <li><a href="#"><i class="fa fa-circle"></i>关于我</a></li>
-                                            <li><a href="contact.jsp"><i class="fa fa-circle"></i>联系我</a></li>
+                                            <li><a href="contact.html"><i class="fa fa-circle"></i>联系我</a></li>
                                             <li><a href="#"><i class="fa fa-circle"></i>博客</a></li>
                                             <li><a href="#"><i class="fa fa-circle"></i>服务中心</a></li>
                                             <li><a href="#"><i class="fa fa-circle"></i>隐私政策</a></li>
@@ -4531,7 +4534,7 @@
                                         <ul>
                                             <li><a href="#"><i class="fa fa-circle"></i>付款选项</a></li>
                                             <li><a href="#"><i class="fa fa-circle"></i>运输</a></li>
-                                            <li><a href="checkout.jsp"><i class="fa fa-circle"></i>查看订单</a></li>
+                                            <li><a href="checkout.html"><i class="fa fa-circle"></i>查看订单</a></li>
                                             <li><a href="#"><i class="fa fa-circle"></i>折扣</a></li>
                                             <li><a href="#"><i class="fa fa-circle"></i>网站地址</a></li>
                                             <li><a href="#"><i class="fa fa-circle"></i>服务</a></li>
@@ -4554,7 +4557,7 @@
                                         <nav>
                                             <ul>
                                                 <li><a href="">网站地址</a></li>
-                                                <li><a href="contact.jsp">联系我</a></li>
+                                                <li><a href="contact.html">联系我</a></li>
                                                 <li class="hidden-md hidden-xs"><a href="#">清单</a></li>
                                                 <li><a href="#">通讯</a></li>
                                             </ul>
@@ -4596,7 +4599,7 @@
                                     <div class="price-box">
                                         <p class="price"><span class="special-price"><span class="amount">$132.00</span></span></p>
                                     </div>
-                                    <a href="shop.jsp" class="see-all">See all features</a>
+                                    <a href="shop.html" class="see-all">See all features</a>
                                     <div class="quick-add-to-cart">
                                         <form method="post" class="cart">
                                             <div class="numbers-row">
@@ -4732,6 +4735,26 @@
 		============================================ -->		
         <script src="js/styleswitch.js"></script>	
         <script src="js/main.js"></script>
+        <!-- template JS
+		============================================ -->
+        <script>
+    	$(document).ready(function() {
+    		$.ajax({
+            	type : "post",
+        		url : "showIndex",
+        		dataType : 'json',
+        		contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
+        		async : true,
+        		success : function(data) {
+        			if(data!=""){
+        				var user = data[0];
+        				var html = template('user-info-script', user);
+        				document.getElementById('user-info').innerHTML = html;	
+        			}
+        		}
+        	})
+	});
+        </script>
     </body>
 </html>
 

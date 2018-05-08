@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+ 	<link rel="stylesheet" href="lib/ImgCropping/css/cropper.min.css">
+    <link rel="stylesheet" href="lib/ImgCropping/css/ImgCropping.css">
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+</head>
+  <body>
+    <div class="container">
+
+		<div class="row row-offcanvas row-offcanvas-right">
+
+			<div class="col-xs-12 col-sm-9">
+				<form class="createpost" action="#" method="post"
+					name="seller/insertProduct">
+					<div class="form-group">
+						<label for="name">商品名</label> 
+						<input type="text" name="name" value="" class="form-control" id="name" maxlength="25" autofocus required>
+					</div>
+					
+					<div class="form-group">
+						<label for="size">尺码</label> 
+						<input type="text" name="size" value="" class="form-control" id="size" maxlength="25" required>
+					</div>
+					<div class="form-group">
+						<label for="price">价格</label> 
+						<input type="text" name="price" value="" class="form-control" id="price" maxlength="25" required>
+					</div>
+					<div class="form-group">
+						<label for="stock">库存</label> 
+						<input type="text" name="stock" value="" class="form-control" id="stock" maxlength="25" required>
+					</div>
+					<div class="form-group">
+						<label for="desc">商品描述</label> 
+						<input type="text" name="desc" value="" class="form-control" id="desc" maxlength="25" required>
+					</div>
+					<div class="form-group">
+						<label for="img">图片</label> 
+						<button id="replaceImg" class="l-btn">选择图片</button>
+						<div style="width: 90px; height: 90px; border: solid 1px #555; padding: 5px; margin-top: 10px;">
+							<img id="finalImg" src="" width="100%">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="pushLevel">推荐类型</label> 
+						<input type="text" name="pushLevel" value="" class="form-control" id="pushLevel" maxlength="25" required>
+					</div>
+					<div class="form-group">
+						<label for="discount">折扣</label> 
+						<input type="text" name="discount" value="" class="form-control" id="discount" maxlength="25" required>
+					</div>
+					<div class="form-group">
+						<label for="type">类型</label> 
+						<select class="form-control" name="type" value="" class="form-control" id="type" required> </select>
+					</div>
+					<div class="form-group">
+						<label for="tag">标签</label> 
+						<input type="text" name="tag" value="" class="form-control" id="tag" maxlength="25" required>
+					</div>
+					<button id="submit" type="button" class="btn btn-primary" style="float:right">提交</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<!--图片裁剪框 start-->
+	<div style="display: none" class="tailoring-container">
+	    <div class="black-cloth" onclick="closeTailor(this)"></div>
+	    <div class="tailoring-content">
+	            <div class="tailoring-content-one">
+	                <label title="上传图片" for="chooseImg" class="l-btn choose-btn">
+	                    <input type="file" accept="image/jpg,image/jpeg,image/png" name="file" id="chooseImg" class="hidden" onchange="selectImg(this)">
+	                    选择图片
+	                </label>
+	                <div class="close-tailoring"  onclick="closeTailor(this)">×</div>
+	            </div>
+	            <div class="tailoring-content-two">
+	                <div class="tailoring-box-parcel">
+	                    <img id="tailoringImg">
+	                </div>
+	                <div class="preview-box-parcel">
+	                    <p>图片预览：</p>
+	                    <div class="square previewImg"></div>
+	                    <div class="circular previewImg"></div>
+	                </div>
+	            </div>
+	            <div class="tailoring-content-three">
+	                <button class="l-btn cropper-reset-btn">复位</button>
+	                <button class="l-btn cropper-rotate-btn">旋转</button>
+	                <button class="l-btn cropper-scaleX-btn">换向</button>
+	                <button class="l-btn sureCut" id="sureCut">确定</button>
+	            </div>
+	        </div>
+	</div>
+	<!--图片裁剪框 end-->
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="lib/ImgCropping/js/cropper.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="js/typeList.js"></script>
+	
+	<script src="lib/ImgCropping/js/cropper.js"></script>
+	<script>
+$('#submit').click(function() {
+	var product = {
+		name:$('#name').val(),
+		sellerId:$('#sellerId').val(),
+		size:$('#size').val(),
+		price:$('#price').val(),
+		stock:$('#stock').val(),
+		desc:$('#desc').val(),
+		img:$('#img').val(),
+		pushLevel:$('#pushLevel').val(),
+		discount:$('#discount').val(),
+		type:$('#type').val(),
+		tag:$('#tag').val()
+	}
+	$.ajax({
+    	type : 'post',
+		url : 'insertProduct',
+		dataType : 'json',
+		contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
+		data : product,
+		async : true,
+		success : function(data) {
+			if(data==1)
+				window.location.href="index.html";
+		}
+	})
+})
+</script>
+<script>
+    //弹出框水平垂直居中
+    (window.onresize = function () {
+        var win_height = $(window).height();
+        var win_width = $(window).width();
+        if (win_width <= 768){
+            $(".tailoring-content").css({
+                "top": (win_height - $(".tailoring-content").outerHeight())/2,
+                "left": 0
+            });
+        }else{
+            $(".tailoring-content").css({
+                "top": (win_height - $(".tailoring-content").outerHeight())/2,
+                "left": (win_width - $(".tailoring-content").outerWidth())/2
+            });
+        }
+    })();
+
+    //弹出图片裁剪框
+    $("#replaceImg").on("click",function () {
+        $(".tailoring-container").toggle();
+    });
+    //图像上传
+    function selectImg(file) {
+        if (!file.files || !file.files[0]){
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            var replaceSrc = evt.target.result;
+            //更换cropper的图片
+            $('#tailoringImg').cropper('replace', replaceSrc,false);//默认false，适应高度，不失真
+        }
+        reader.readAsDataURL(file.files[0]);
+    }
+    //cropper图片裁剪
+    $('#tailoringImg').cropper({
+        aspectRatio: 1/1,//默认比例
+        preview: '.previewImg',//预览视图
+        guides: false,  //裁剪框的虚线(九宫格)
+        autoCropArea: 0.5,  //0-1之间的数值，定义自动剪裁区域的大小，默认0.8
+        movable: false, //是否允许移动图片
+        dragCrop: true,  //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+        movable: true,  //是否允许移动剪裁框
+        resizable: true,  //是否允许改变裁剪框的大小
+        zoomable: false,  //是否允许缩放图片大小
+        mouseWheelZoom: false,  //是否允许通过鼠标滚轮来缩放图片
+        touchDragZoom: true,  //是否允许通过触摸移动来缩放图片
+        rotatable: true,  //是否允许旋转图片
+        crop: function(e) {
+            // 输出结果数据裁剪图像。
+        }
+    });
+    //旋转
+    $(".cropper-rotate-btn").on("click",function () {
+        $('#tailoringImg').cropper("rotate", 45);
+    });
+    //复位
+    $(".cropper-reset-btn").on("click",function () {
+        $('#tailoringImg').cropper("reset");
+    });
+    //换向
+    var flagX = true;
+    $(".cropper-scaleX-btn").on("click",function () {
+        if(flagX){
+            $('#tailoringImg').cropper("scaleX", -1);
+            flagX = false;
+        }else{
+            $('#tailoringImg').cropper("scaleX", 1);
+            flagX = true;
+        }
+        flagX != flagX;
+    });
+
+    //裁剪后的处理
+    $("#sureCut").on("click",function () {
+        if ($("#tailoringImg").attr("src") == null ){
+            return false;
+        }else{
+            var cas = $('#tailoringImg').cropper('getCroppedCanvas');//获取被裁剪后的canvas
+            var base64url = cas.toDataURL('image/png'); //转换为base64地址形式
+            $("#finalImg").prop("src",base64url);//显示为图片的形式
+
+            //关闭裁剪框
+            closeTailor();
+        }
+    });
+    //关闭裁剪框
+    function closeTailor() {
+        $(".tailoring-container").toggle();
+    }
+</script>
+</body>
+</html>

@@ -23,25 +23,13 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void add(Product product) {
 		try {
-			Product productT = new Product();
-			productT.setName(product.getName());
-			productT.setSize(product.getSize());
-			productT.setPrice(product.getPrice());
-			productT.setStock(product.getStock());
-			productT.setDesc(product.getDesc());
-			productT.setImg(product.getImg());
-			productT.setStatus(2);
-			productT.setPushLevel(product.getPushLevel());
-			productT.setDiscount(product.getDiscount());
-			productT.setDprice(product.getPrice() * product.getDiscount());
-			productT.setCreate_at(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-					.format(new Date()));
-			productT.setUpdate_at(productT.getCreate_at());
-			productT.setTypeId(product.getTypeId());
-			productT.setTag(product.getTag());
-			productMapper.add(productT);
-			System.out.println("服务层：插入商品" + productT);
-			productMapper.addAttr(productT);
+			product.setStatus(2);
+			product.setDprice(product.getPrice() * product.getDiscount());
+			product.setCreate_at(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+			product.setUpdate_at(product.getCreate_at());
+			System.out.println("服务层2：插入商品" + product);
+			productMapper.add(product);
+			productMapper.addAttr(product);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -126,9 +114,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Object> findAllType() {
+	public List<Object> findTypes() {
 		List<Object> types = new ArrayList<Object>();
-		types = productMapper.findAllType();
+		types = productMapper.findTypes();
 		return types;
 	}
 }

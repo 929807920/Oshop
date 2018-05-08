@@ -15,5 +15,5 @@ public interface ProductService {
 	void update(Product product);
 	PageInfo<Product> searchList(int pageNum ,int pageSize,String name);
 	PageInfo<Product> productList(int pageNum, int pageSize);
-	List<Object> findAllType();
+	List<Object> findTypes();
 }

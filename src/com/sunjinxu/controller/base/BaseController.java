@@ -69,9 +69,8 @@ public class BaseController {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		JSONArray typeNames = JSONArray.fromObject(obj);
-		// String data = array.toString();
 		out.print(typeNames);
 		out.flush();
 		out.close();
-	}	
+	}
 }

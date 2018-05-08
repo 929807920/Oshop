@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sunjinxu.controller.base.BaseController;
 import com.sunjinxu.pojo.Product;
+import com.sunjinxu.pojo.user.Basic;
 import com.sunjinxu.service.ProductService;
 import com.sunjinxu.tools.PageInfo;
 
@@ -24,26 +25,13 @@ public class ProductController extends BaseController {
 	private ProductService productService;
 	
 	/**
-	 * 查找所有商品类型
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 */
-	@RequestMapping("typeList")
-	public void typeList(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		List<Object> types = productService.findAllType();
-		printJSONArray(response, types);
-		return;
-	}
-	
-	/**
 	 * 新增文章
 	 * @return
 	 */
-	@RequestMapping("createProduct")
+	@RequestMapping("create")
 	public ModelAndView createProduct() {
-		System.out.println("控制器：createProduct");
-		ModelAndView mav = new ModelAndView("seller/createProduct");
+		System.out.println("控制器：create");
+		ModelAndView mav = new ModelAndView("createProduct");
 		return mav;
 	}
 	
@@ -54,18 +42,20 @@ public class ProductController extends BaseController {
 	 */
 	@Transactional
 	@RequestMapping("insertProduct")
-	public ModelAndView insertProduct(HttpServletRequest request,Product product) {
+	public void insertProduct(HttpServletRequest request,HttpServletResponse response,Product product) {
 		System.out.println("控制器：insertProduct"+product);
 		try {
-			/*Basic sessionUser = (Basic) request.getSession().getAttribute("user");
-			product.setSellerId((int) sessionUser.getId());
-			product.setTypeId(Integer.parseInt(request.getParameter("typeId")));
-			productService.add(product);*/
+			Basic sessionUser = (Basic) request.getSession().getAttribute("user");
+			System.out.println("控制器：insertProduct"+sessionUser);
+			if (sessionUser!=null) {
+				product.setSellerId(sessionUser.getId());
+				System.out.println("控制器：insertProduct"+product);
+				productService.add(product);
+				printJSONInteger(response, 1);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		ModelAndView mav = new ModelAndView("redirect:/single?id=" + product.getId());
-		return mav;
 	}
 	
 	/**
@@ -175,5 +165,18 @@ public class ProductController extends BaseController {
 		Product product = productService.get(productId);
 		mav.addObject("product", product);
 		return mav;
+	}
+	
+	/**
+	 * 查找所有产品类型
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping("typeList")
+	public void typeList(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		System.out.println("控制器：typeList");
+		List<Object> types = productService.findTypes();
+		printJSONArray(response, types);
 	}
 }
